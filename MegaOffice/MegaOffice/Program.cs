@@ -10,7 +10,7 @@ namespace MegaOffice
     {
         static void Main(string[] args)
         {
-            var db = new DatabaseManager();
+            var db = new DatabaseManager("Server=tcp:kaffedbserver.database.windows.net,1433;Initial Catalog=MegaOfficeDB;Persist Security Info=False;User ID=ServerAdmin;Password=MandelbiskviHallongrotta2;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
 
 
@@ -124,7 +124,7 @@ namespace MegaOffice
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Välkommen till MegaOffice");
             Console.WriteLine("(1) Läs in alla kunder.");
-            Console.WriteLine("(2) Ny kund.");
+            Console.WriteLine("(2) Lägg till ny kund.");
             Console.WriteLine("(3) Ta bort kund.");
             Console.WriteLine("(4) Ändra kund.");
             Console.WriteLine("(Q) Avsluta.");
