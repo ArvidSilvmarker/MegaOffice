@@ -36,7 +36,6 @@ namespace MegaOffice
             using (SqlCommand command = new SqlCommand(sql, connection))
             {
                 connection.Open();
-                //command.Parameters.Add(new SqlParameter("Title", title));
 
                 SqlDataReader reader = command.ExecuteReader();
                 

@@ -40,7 +40,7 @@ namespace MegaOffice
                         PrintCustomers(db.ReadAllCustomers());
                         db.UpdateCustomer(GetUpdatedCustomerFromUser(db));
                         Console.WriteLine();
-                        break;   
+                        break;
                     case "Q":
                     case "C":
                         quit = true;
@@ -147,6 +147,8 @@ namespace MegaOffice
 
             Console.WriteLine();
         }
+
+        
 
     }
 }
