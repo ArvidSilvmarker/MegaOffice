@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace MegaOffice
@@ -37,7 +38,7 @@ namespace MegaOffice
                         break;
                     case "4":
                         PrintCustomers(db.ReadAllCustomers());
-                        db.UpdateCustomer(GetUpdatedCustomerFromUser());
+                        db.UpdateCustomer(GetUpdatedCustomerFromUser(db));
                         Console.WriteLine();
                         break;   
                     case "Q":
@@ -55,10 +56,33 @@ namespace MegaOffice
 
         }
 
-        private static Customer GetUpdatedCustomerFromUser()
+        private static Customer GetUpdatedCustomerFromUser(DatabaseManager db)
         {
             int kundnummer = GetCustomerIDFromUser();
-            return new Customer("Förnamn", "Efternamn", "Email", "Telefonnummer");
+            Customer customer = db.ReadCustomer(kundnummer);
+            Console.WriteLine("(1) Förnamn, (2) Efternamn, (3) Email, (4) Telefonnummer");
+            Console.Write("Vad vill du ändra: ");
+            var answer = Console.ReadLine();
+            Console.Write("Skriv in nytt värde: ");
+            var value = Console.ReadLine();
+            
+            switch (answer)
+            {
+                case "1":
+                    customer.FirstName = value;
+                    break;
+                case "2":
+                    customer.LastName = value;
+                    break;
+                case "3":
+                    customer.Email = value;
+                    break;
+                case "4":
+                    customer.Phone = value;
+                    break;
+            }
+
+            return customer;
         }
 
         private static int GetCustomerIDFromUser()
@@ -101,7 +125,8 @@ namespace MegaOffice
             Console.WriteLine("Välkommen till MegaOffice");
             Console.WriteLine("(1) Läs in alla kunder.");
             Console.WriteLine("(2) Ny kund.");
-            Console.WriteLine("(3) Ta bort kund. ");
+            Console.WriteLine("(3) Ta bort kund.");
+            Console.WriteLine("(4) Ändra kund.");
             Console.WriteLine("(Q) Avsluta.");
             Console.Write("Kommando: ");
             Console.ResetColor();

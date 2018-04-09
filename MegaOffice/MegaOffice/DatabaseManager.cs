@@ -55,6 +55,36 @@ namespace MegaOffice
             return customerList;
         }
 
+        public Customer ReadCustomer(int kundnummer)
+        {
+            var sql = @"SELECT ID, FirstName, LastName, Email, PhoneNr
+                        FROM Customer
+                        WHERE ID=@ID";
+            
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                connection.Open();
+                command.Parameters.Add(new SqlParameter("ID", kundnummer));
+
+                SqlDataReader reader = command.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    string firstName = reader.GetString(1);
+                    string lastName = reader.GetString(2);
+                    string email = reader.GetString(3);
+                    string phone = reader.GetString(4);
+
+                    return new Customer(id, firstName, lastName, email, phone);
+                }
+            }
+
+            return null;
+        }
+
         public void CreateCustomer(Customer c)
         {
             var sql = $@"INSERT INTO Customer (FirstName, LastName, Email, PhoneNr)
@@ -105,5 +135,7 @@ namespace MegaOffice
                 command.ExecuteNonQuery();
             }
         }
+
+
     }
 }
