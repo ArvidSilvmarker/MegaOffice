@@ -10,9 +10,11 @@ namespace MegaOffice
     {
         static void Main(string[] args)
         {
-            var db = new DatabaseManager("Server=tcp:kaffedbserver.database.windows.net,1433;Initial Catalog=MegaOfficeDB;Persist Security Info=False;User ID=ServerAdmin;Password=MandelbiskviHallongrotta2;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            //var db = new DatabaseManager("Server=tcp:kaffedbserver.database.windows.net,1433;Initial Catalog=MegaOfficeDB;Persist Security Info=False;User ID=ServerAdmin;Password=MandelbiskviHallongrotta2;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            string password = GetPasswordFromUser();
+            Console.WriteLine();
 
-
+            var db = new DatabaseManager($"Server = tcp:kaffedbserver.database.windows.net,1433; Initial Catalog = Master; Persist Security Info = False; User ID = arvid.silvmarker@collectorbank.se; Password ={password}; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Authentication =\"Active Directory Password\";");
 
             bool quit = false;
             while (!quit)
@@ -146,6 +148,33 @@ namespace MegaOffice
             }
 
             Console.WriteLine();
+        }
+
+        static string GetPasswordFromUser()
+        {
+            string pass = "";
+            Console.Write("Enter your password: ");
+            ConsoleKeyInfo key;
+
+            do
+            {
+                key = Console.ReadKey(true);
+
+                // Backspace Should Not Work
+                if (key.Key != ConsoleKey.Backspace)
+                {
+                    pass += key.KeyChar;
+                    Console.Write("*");
+                }
+                else
+                {
+                    Console.Write("\b");
+                }
+            }
+            // Stops Receving Keys Once Enter is Pressed
+            while (key.Key != ConsoleKey.Enter);
+
+            return pass;
         }
 
         
