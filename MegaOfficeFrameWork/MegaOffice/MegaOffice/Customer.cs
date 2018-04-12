@@ -35,6 +35,10 @@ namespace MegaOffice
             
         }
 
+        public Customer(int id)
+        {
+            CustomerID = id;
+        }
         public Customer(int id, string firstName, string lastName, string email, List<string> phone, List<Product> interestingProducts)
         {
             CustomerID = id;
