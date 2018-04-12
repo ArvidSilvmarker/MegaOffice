@@ -42,9 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Category.cs" />
     <Compile Include="Customer.cs" />
+    <Compile Include="CustomerMenu.cs" />
     <Compile Include="DataBaseManager.cs" />
-    <Compile Include="Menu.cs" />
+    <Compile Include="MainMenu.cs" />
+    <Compile Include="Product.cs" />
+    <Compile Include="ProductMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

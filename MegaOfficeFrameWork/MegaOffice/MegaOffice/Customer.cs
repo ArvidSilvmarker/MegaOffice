@@ -10,14 +10,22 @@ namespace MegaOffice
         public string LastName { get; set; }
         public string Email { get; set; }
         public List<string> Phone { get; set; }
-        public int Kundnummer { get; set; }
+        public int CustomerID { get; set; }
+        public List<Product> InterestingProducts { get; set; }
 
-        public Customer(string firstName, string lastName, string email, List<string> phone) : this(0, firstName, lastName,
-            email, phone)
+        public Customer(string firstName, string lastName, string email, List<string> phone, List<Product> products) : this(0, firstName, lastName,
+            email, phone, products)
         {
         }
 
-        public Customer(int id, string firstName, string lastName, string email) : this (id, firstName, lastName, email, new List<string>())
+        public Customer(string firstName, string lastName, string email, List<string> phone): this(0, firstName, lastName,
+            email, phone, new List<Product>())
+        {
+        
+
+        }
+
+        public Customer(int id, string firstName, string lastName, string email) : this (id, firstName, lastName, email, new List<string>(), new List<Product>())
         {
 
         }
@@ -27,13 +35,14 @@ namespace MegaOffice
             
         }
 
-        public Customer(int id, string firstName, string lastName, string email, List<string> phone)
+        public Customer(int id, string firstName, string lastName, string email, List<string> phone, List<Product> interestingProducts)
         {
-            Kundnummer = id;
+            CustomerID = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Phone = phone;
+            InterestingProducts = interestingProducts;
         }
     }
 }
