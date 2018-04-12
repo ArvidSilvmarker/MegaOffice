@@ -29,30 +29,31 @@ namespace MegaOffice
                 switch (cmd.ToUpper())
                 {
                     case ("1"):
+                        PrintProducts(_db.ReadAllProducts());
                         break;
                     case "2":
+                        PrintSingleProduct(_db.ReadProduct(GetProductIDFromUser()));
                         break;
                     case "3":
+                        _db.CreateProduct(GetNewProductFromUser());
                         break;
                     case "4":
+                        PrintProducts(_db.ReadAllProducts());
+                        _db.UpdateProduct(GetUpdatedProductFromUser());
                         break;
                     case "5":
-                        break;
-                    case "6":
-                        break;
-                    case "7":
-                        break;
-                    case "8":
+                        PrintProducts(_db.ReadAllProducts());
+                        int id = GetProductIDFromUser();
+                        _db.DeleteProduct(id);
+                        WriteLineInColor($"Tar bort produkt {id}.", ConsoleColor.Red);
+                        Console.WriteLine();
                         break;
                     case "Q":
                     case "C":
                         quit = true;
                         break;
-
-
                 }
             }
-
         }
 
         public void PrintProductMenu()
@@ -60,13 +61,10 @@ namespace MegaOffice
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Kundmeny");
             Console.WriteLine("(1) Visa alla produkter.");
-            Console.WriteLine("(2) Visa alla kategorier.");
-            Console.WriteLine("(3) Visa produkt.");
-            Console.WriteLine("(4) Visa kategori.");
-            Console.WriteLine("(5) Ändra produkt.");
-            Console.WriteLine("(6) Ändra kategori.");
-            Console.WriteLine("(7) Ta bort produkt.");
-            Console.WriteLine("(8) Ta bort kategori.");
+            Console.WriteLine("(2) Visa produkt.");
+            Console.WriteLine("(3) Lägg till ny produkt.");
+            Console.WriteLine("(4) Ändra produkt.");
+            Console.WriteLine("(5) Ta bort produkt.");
             Console.WriteLine("(Q) Tillbaka till Huvudmenyn.");
             Console.Write("Kommando: ");
             Console.ResetColor();
@@ -146,29 +144,9 @@ namespace MegaOffice
             };
         }
 
-        private Category GetCategoryFromUser()
-        {
-            PrintCategories(_db.ReadAllCategories());
-            WriteInColor("Välj kategori: ", ConsoleColor.DarkMagenta);
-            return _db.ReadCategory(Convert.ToInt32(Console.ReadLine())-1);
-        }
 
-        private void PrintCategories(List<Category> categoryList)
-        {
-            WriteInColor($"{"Kategorinummer",-15}{"Namn",-22}", ConsoleColor.Red);
-            foreach (var category in categoryList)
-            {
-                Console.WriteLine($"{category.CategoryID,-15}{category.Name,-22}");
-            }
 
-            Console.WriteLine();
-        }
 
-        public Category EnterNewCategory()
-        {
-            return new Category();
-        
-        }
 
     }
 }

@@ -318,7 +318,7 @@ namespace MegaOffice
             UpdatePhoneNumbers(c);
             UpdateInterestingProducts(c);
         }
-        private void UpdateProduct(Product p)
+        public void UpdateProduct(Product p)
         {
             var sql = $@"UPDATE Products
                         SET Name=@Name,Price=@Price,ProductCategoryID=@ProductCategoryID
@@ -337,7 +337,7 @@ namespace MegaOffice
 
             UpdateInterestedCustomers(p);
         }
-        private void UpdateCategory(Category c)
+        public void UpdateCategory(Category c)
         {
             var sql = $@"Update ProductCategories
                          SET Name=@Name

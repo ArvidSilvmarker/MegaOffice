@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
+    <Compile Include="CategoryMenu.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerMenu.cs" />
     <Compile Include="DataBaseManager.cs" />
