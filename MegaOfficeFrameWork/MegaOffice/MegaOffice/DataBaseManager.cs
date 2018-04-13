@@ -382,6 +382,7 @@ namespace MegaOffice
         }
 
 
+
         public void DeleteCustomer(int customerID)
         {
             DeletePhoneNumbers(customerID);
@@ -497,6 +498,7 @@ namespace MegaOffice
         }
 
 
+
         private void InsertPhoneNumbers(Customer c)
         {
             if (c.Phone.Count > 0)
@@ -572,6 +574,7 @@ namespace MegaOffice
                 }
             }
         }
+
 
 
         private List<Customer> BuildInterestedCustomersList(List<Customer> customerList, int customerId)
