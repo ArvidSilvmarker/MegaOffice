@@ -6,15 +6,21 @@ using System.Threading.Tasks;
 
 namespace MegaOffice
 {
-    class CategoryMenu
+    public class CategoryMenu
     {
+        private DatabaseManager _db;
+        private MainMenu _mainMenu;
+        public CategoryMenu(DatabaseManager db, MainMenu mainMenu)
+        {
+            this._db = db;
+            this._mainMenu = mainMenu;
+        }
         public Category EnterNewCategory()
         {
-            return new Category();
-
+            return new Category(10, "Godis");
         }
 
-        private Category GetCategoryFromUser()
+        public Category GetCategoryFromUser()
         {
             PrintCategories(_db.ReadAllCategories());
             WriteInColor("Välj kategori: ", ConsoleColor.DarkMagenta);

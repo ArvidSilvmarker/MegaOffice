@@ -72,14 +72,12 @@ namespace MegaOffice
         }
         public void PrintCustomers(List<Customer> customerList)
         {
-            //Stringalignment {blabla,-10} => ge blabla 10 teckens utrymme, och skriv från vänster.
-            // {blabla,5} => ge blabla 5 teckens utrymme, och skriv från höger.
 
             WriteLineInColor($"{"Kundnummer",-12}{"Förnamn",-17}{"Efternamn",-22}{"E-postadress",-32}{"Telefonnummer",-20}{"Fler nr",-9}", ConsoleColor.Cyan);
             foreach (var customer in customerList)
             {
                 Console.Write($"{customer.CustomerID,-12}{customer.FirstName,-17}{customer.LastName,-22}{customer.Email,-32}");
-                Console.Write($"{customer.Phone.First(),-20}");
+                Console.Write($"{(customer.Phone.Count > 0 ? customer.Phone.First() : ""),-20}");
                 if (customer.Phone.Where(phone => phone != null).ToList().Count > 1)
                     Console.Write($"{"    *",-9}");
                 else
@@ -158,12 +156,21 @@ namespace MegaOffice
 
         private void ChangeInterestingProducts(Customer customer)
         {
+            //customer.InterestingProducts.Select(product => _db.ReadProduct(product.ProductID));
+            List<Product> middleList = new List<Product>();
+            foreach (var product in customer.InterestingProducts)
+            {
+                middleList.Add(_db.ReadProduct(product.ProductID));
+            }
+
+            customer.InterestingProducts = middleList;
+
             if (customer.InterestingProducts.Count > 0)
             {
-                WriteInColor("Ändra produkt - ", ConsoleColor.DarkCyan);
+                WriteLineInColor("Ändra produkt - ", ConsoleColor.DarkCyan);
                 for (int i = 0; i < customer.InterestingProducts.Count; i++)
                 {
-                    Console.WriteLine($"Ändra {customer.InterestingProducts[i].Name} ({i + 1})");
+                    Console.WriteLine($"Ändra - ID:{customer.InterestingProducts[i].ProductID} Namn: {customer.InterestingProducts[i].Name} -- ({i + 1})");
                 }
                 Console.WriteLine($"Lägg till ny produkt ({customer.Phone.Count + 1})");
                 Console.Write("Val: ");
@@ -178,7 +185,7 @@ namespace MegaOffice
             }
             else
             {
-                customer.InterestingProducts.Add(_mainMenu.ProductMenu.EnterNewProduct());
+                customer.InterestingProducts.Add(_mainMenu.ProductMenu.GetProductFromUser());
             }
 
             Console.WriteLine();

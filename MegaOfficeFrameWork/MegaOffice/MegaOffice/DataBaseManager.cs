@@ -118,7 +118,7 @@ namespace MegaOffice
                         LEFT JOIN PhoneNr ON Customer.ID=PhoneNr.customerID
                         LEFT JOIN Interest ON Customer.ID=Interest.customerID";
 
-            List<Customer> customerList = null;
+            List<Customer> customerList = new List<Customer>();
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             using (SqlCommand command = new SqlCommand(sql, connection))
@@ -130,13 +130,22 @@ namespace MegaOffice
                 while (reader.Read())
                 {
                     int id = reader.GetInt32(0);
-                    string firstName = reader.GetString(1);
-                    string lastName = reader.GetString(2);
-                    string email = reader.GetString(3);
+
+                    string firstName = null;
+                    if (!reader.IsDBNull(1))
+                        firstName = reader.GetString(1);
+                    string lastName = null;
+                    if (!reader.IsDBNull(2))
+                        lastName = reader.GetString(2);
+                    string email = null;
+                    if (!reader.IsDBNull(3))
+                        email = reader.GetString(3);
                     string phone = null;
                     if (!reader.IsDBNull(4))
                         phone = reader.GetString(4);
-                    int productId = reader.GetInt32(5);
+                    int productId = 0;
+                    if (!reader.IsDBNull(5))
+                        productId = reader.GetInt32(5);
 
                     customerList = BuildCustomerList(customerList, id, firstName, lastName, email, phone, productId);
                 }
@@ -171,7 +180,9 @@ namespace MegaOffice
                     string phone = null;
                     if (!reader.IsDBNull(4))
                         phone = reader.GetString(4);
-                    int productId = reader.GetInt32(5);
+                    int productId = 0;
+                    if (!reader.IsDBNull(5))
+                        productId = reader.GetInt32(5);
 
                     customer = BuildCustomer(customer, id, firstName, lastName, email, phone, productId);
                 }
@@ -203,20 +214,22 @@ namespace MegaOffice
                     decimal price = reader.GetDecimal(2);
                     int categoryID = reader.GetInt32(3);
                     string categoryName = reader.GetString(4);
-                    int productID = reader.GetInt32(5);
+                    int customerID = 0;
+                    if (!reader.IsDBNull(5))
+                        customerID = reader.GetInt32(5);
 
 
                     Category category = BuildCategory(categoryList, categoryID, categoryName);
-                    productList = BuildProductList(productList, id, name, price, category, productID);
+                    productList = BuildProductList(productList, id, name, price, category, customerID);
                 }
             }
             return productList;
         }
         public Product ReadProduct(int productId)
         {
-            var sql = @"SELECT Products.ID, Name, Price, ProductCategories.ID, ProductCategories.Name, customerID
+            var sql = @"SELECT Products.ID, Products.Name, Products.Price, ProductCategories.ID, ProductCategories.Name, Interest.CustomerID
                         FROM Products
-                        LEFT JOIN Category ON Products.CategoryID=ProductCategories.ID
+                        LEFT JOIN ProductCategories ON Products.ProductCategoryID=ProductCategories.ID
                         LEFT JOIN Interest ON Products.ID=Interest.ProductID
                         WHERE Products.ID=@ID";
 
@@ -240,7 +253,9 @@ namespace MegaOffice
                     string categoryName = null;
                     if (!reader.IsDBNull(4))
                         categoryName = reader.GetString(4);
-                    int customerID = reader.GetInt32(5);
+                    int customerID = 0;
+                    if (!reader.IsDBNull(5))
+                        customerID = reader.GetInt32(5);
 
                     interestedCustomers = BuildInterestedCustomersList(interestedCustomers, customerID);
                     Category category = new Category(categoryID, categoryName);
@@ -277,7 +292,7 @@ namespace MegaOffice
         {
             string sql = @"SELECT Name
                            FROM ProductCategories
-                           WHERE CategoryID=@ID";
+                           WHERE ProductCategoryID=@ID";
 
             string name = "";
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -561,7 +576,7 @@ namespace MegaOffice
 
         private List<Customer> BuildInterestedCustomersList(List<Customer> customerList, int customerId)
         {
-            if (customerList.All(c => c.CustomerID != customerId))
+            if (customerList.All(c => c.CustomerID != customerId) && customerId != 0)
                 customerList.Add(new Customer{CustomerID = customerId});
             return customerList;
         }
@@ -588,7 +603,7 @@ namespace MegaOffice
 
             if (phoneNr != null && !customer.Phone.Contains(phoneNr))
                 customer.Phone.Add(phoneNr);
-            if (customer.InterestingProducts.All(p => p.ProductID != productID))
+            if (customer.InterestingProducts.All(p => p.ProductID != productID) && productID != 0)
                 customer.InterestingProducts.Add(new Product(productID));
 
             return customerList;
@@ -609,7 +624,7 @@ namespace MegaOffice
             }
             if (customer.Phone.All(phoneNr => phoneNr != phone))
                 customer.Phone.Add(phone);
-            if (customer.InterestingProducts.All(product => product.ProductID != productId))
+            if (customer.InterestingProducts.All(product => product.ProductID != productId) && productId != 0)
                 customer.InterestingProducts.Add(new Product(productId));
 
             return customer;
@@ -634,7 +649,7 @@ namespace MegaOffice
                 product = productList.Find(p => p.ProductID == id);
             }
 
-            if (product.InterestedCustomers.All(c => c.CustomerID != customerID))
+            if (product.InterestedCustomers.All(c => c.CustomerID != customerID) && customerID != 0)
                 product.InterestedCustomers.Add(new Customer(customerID));
 
             return productList;

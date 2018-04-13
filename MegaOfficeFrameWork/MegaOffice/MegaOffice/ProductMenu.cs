@@ -55,6 +55,40 @@ namespace MegaOffice
                 }
             }
         }
+        public void PrintProducts(List<Product> productList)
+        {
+            WriteLineInColor($"{"Produktnummer",-15}{"Namn",-22}{"Pris",8}  {"Kategori",-22}{"Intressant för",-30}", ConsoleColor.Red);
+            foreach (var product in productList)
+            {
+                Console.Write($"{product.ProductID,-15}{product.Name,-22}{product.Price,8:##.00}  {product.Category.Name,-22}");
+                Console.WriteLine(CustomerIDString(product.InterestedCustomers));
+            }
+
+            Console.WriteLine();
+        }
+        private Product GetUpdatedProductFromUser()
+        {
+            WriteInColor("ProduktID: ", ConsoleColor.DarkMagenta);
+            int id = Convert.ToInt32(Console.ReadLine());
+            WriteInColor("Produktnamn: ", ConsoleColor.DarkMagenta);
+            string name = Console.ReadLine();
+            WriteInColor("Pris: ", ConsoleColor.DarkMagenta);
+            Decimal price = Convert.ToDecimal(Console.ReadLine());
+            Category category = _mainMenu.CategoryMenu.GetCategoryFromUser();
+            return new Product
+            {
+                ProductID = id,
+                Name = name,
+                Price = price,
+                Category = category,
+                InterestedCustomers = new List<Customer>()
+            };
+        }
+
+        private Product GetNewProductFromUser()
+        {
+            return EnterNewProduct();
+        }
 
         public void PrintProductMenu()
         {
@@ -83,24 +117,20 @@ namespace MegaOffice
             return Convert.ToInt32(Console.ReadLine());
         }
 
-        public void PrintProducts(List<Product> productList)
+        public void PrintSingleProduct(Product product)
         {
-            WriteInColor($"{"Produktnummer",-15}{"Namn",-22}{"Pris",10}{"Kategori",-22}{"Intressant för",-30}", ConsoleColor.Red);
-            foreach (var product in productList)
+            WriteLineInColor($"{"Produktnummer",-15}{"Namn",-22}{"Pris",8}  {"Kategori",-22}{"Intressant för",-30}", ConsoleColor.Red);
+            Console.Write($"{product.ProductID,-15}{product.Name,-22}{product.Price,8:##.00}  {product.Category.Name,-22}");
+            Console.WriteLine(CustomerIDString(product.InterestedCustomers));
+            Console.WriteLine();
+            WriteLineInColor("Intresserade kunder: ", ConsoleColor.Red);
+            foreach (var customer in product.InterestedCustomers)
             {
-                Console.WriteLine($"{product.ProductID,-15}{product.Name,-22}{product.Price,10:##.00}{product.Category.Name,-22}");
+                Customer updatedCustomer = _db.ReadCustomer(customer.CustomerID);
+                Console.WriteLine($"{updatedCustomer.FirstName} {updatedCustomer.LastName}");
             }
 
             Console.WriteLine();
-        }
-
-        public void PrintSingleProduct(Product product)
-        {
-            WriteInColor($"{"Produktnummer",-15}{"Namn",-22}{"Pris",10}{"Kategori",-22}{"Intressant för",-30}", ConsoleColor.Red);
-            Console.Write($"{product.ProductID,-15}{product.Name,-22}{product.Price,10:##.00}{product.Category.Name,-22}");
-            Console.WriteLine(CustomerIDString(product.InterestedCustomers));
-            Console.WriteLine();
-
         }
 
         private string CustomerIDString(List<Customer> customers)
@@ -134,7 +164,7 @@ namespace MegaOffice
             string name = Console.ReadLine();
             WriteInColor("Pris: ",ConsoleColor.DarkMagenta);
             Decimal price = Convert.ToDecimal(Console.ReadLine());
-            Category category = GetCategoryFromUser();
+            Category category = _mainMenu.CategoryMenu.GetCategoryFromUser();
             return new Product
             {
                 Name = name,
@@ -143,10 +173,6 @@ namespace MegaOffice
                 InterestedCustomers = new List<Customer>()
             };
         }
-
-
-
-
 
     }
 }

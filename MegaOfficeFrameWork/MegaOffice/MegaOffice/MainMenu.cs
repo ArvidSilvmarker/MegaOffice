@@ -12,12 +12,15 @@ namespace MegaOffice
         public CustomerMenu CustomerMenu { get; set; }
         public ProductMenu ProductMenu { get; set; }
 
+        public CategoryMenu CategoryMenu { get; set; }
+
 
         public MainMenu()
         {
             _db = CreateDBConnection();
             CustomerMenu = new CustomerMenu(_db, this);
             ProductMenu = new ProductMenu(_db, this);
+            CategoryMenu = new CategoryMenu(_db, this);
         }
 
         private DatabaseManager CreateDBConnection()
