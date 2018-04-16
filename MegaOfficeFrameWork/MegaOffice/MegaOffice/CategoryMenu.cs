@@ -24,12 +24,12 @@ namespace MegaOffice
         {
             PrintCategories(_db.ReadAllCategories());
             WriteInColor("Välj kategori: ", ConsoleColor.DarkMagenta);
-            return _db.ReadCategory(Convert.ToInt32(Console.ReadLine()) - 1);
+            return _db.ReadCategory(Convert.ToInt32(Console.ReadLine()));
         }
 
         private void PrintCategories(List<Category> categoryList)
         {
-            WriteInColor($"{"Kategorinummer",-15}{"Namn",-22}", ConsoleColor.Red);
+            WriteLineInColor($"{"Kategorinummer",-15}{"Namn",-22}", ConsoleColor.Red);
             foreach (var category in categoryList)
             {
                 Console.WriteLine($"{category.CategoryID,-15}{category.Name,-22}");

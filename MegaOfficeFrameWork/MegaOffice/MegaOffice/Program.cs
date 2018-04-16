@@ -13,7 +13,9 @@ namespace MegaOffice
     {
         static void Main(string[] args)
         {
-            var program = new MainMenu();
+            Console.Write("Ladda lokal databas? (ja/nej): ");
+            bool localDB = Console.ReadLine().ToLower().Trim() == "ja" ? true : false;
+            var program = new MainMenu(true);
             program.Menu();
         }
     }

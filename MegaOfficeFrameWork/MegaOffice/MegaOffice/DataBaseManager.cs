@@ -266,7 +266,7 @@ namespace MegaOffice
         }
         public List<Category> ReadAllCategories()
         {
-            string sql = @"SELECT CategoryID, Name
+            string sql = @"SELECT ID, Name
                            FROM ProductCategories";
             List<Category> categories = new List<Category>();
 
@@ -292,7 +292,7 @@ namespace MegaOffice
         {
             string sql = @"SELECT Name
                            FROM ProductCategories
-                           WHERE ProductCategoryID=@ID";
+                           WHERE ID=@ID";
 
             string name = "";
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -315,6 +315,9 @@ namespace MegaOffice
 
         public void UpdateCustomer(Customer c)
         {
+            UpdatePhoneNumbers(c);
+            UpdateInterestingProducts(c);
+
             var sql = $@"UPDATE Customer
                         SET FirstName=@FirstName,LastName=@LastName,Email=@Email
                         WHERE ID=@ID";
@@ -329,9 +332,6 @@ namespace MegaOffice
                 command.Parameters.Add(new SqlParameter("ID", c.CustomerID));
                 command.ExecuteNonQuery();
             }
-
-            UpdatePhoneNumbers(c);
-            UpdateInterestingProducts(c);
         }
         public void UpdateProduct(Product p)
         {
@@ -473,7 +473,7 @@ namespace MegaOffice
         public void DeleteInterestingProducts(int customerID)
         {
             var sql = $@"DELETE FROM Interest
-                         WHERE customerID=@ID";
+                         WHERE CustomerID=@ID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             using (SqlCommand command = new SqlCommand(sql, connection))

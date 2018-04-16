@@ -15,25 +15,30 @@ namespace MegaOffice
         public CategoryMenu CategoryMenu { get; set; }
 
 
-        public MainMenu()
+        public MainMenu(bool useLocalDB)
         {
-            _db = CreateDBConnection();
+            if (useLocalDB)
+                _db = new DatabaseManager();
+            else
+                _db = CreateAzureDBConnection();
+
             CustomerMenu = new CustomerMenu(_db, this);
             ProductMenu = new ProductMenu(_db, this);
             CategoryMenu = new CategoryMenu(_db, this);
         }
 
-        private DatabaseManager CreateDBConnection()
+        private DatabaseManager CreateAzureDBConnection()
         {
             DatabaseManager db;
 
             while (true)
             {
+                string username = GetUsernameFromUser();
                 string password = GetPasswordFromUser();
                 try
                 {
                     db = new DatabaseManager(
-                        $"Server = tcp:kaffedbserver.database.windows.net,1433; Initial Catalog = MegaOfficeDB; Persist Security Info = False; User ID = arvid.silvmarker@collectorbank.se; Password ={password}; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Authentication =\"Active Directory Password\";");
+                        $"Server = tcp:kaffedbserver.database.windows.net,1433; Initial Catalog = MegaOfficeDB; Persist Security Info = False; User ID ={username}; Password ={password}; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Authentication =\"Active Directory Password\";");
                 }
                 catch
                 {
@@ -46,6 +51,12 @@ namespace MegaOffice
             return db;
         }
 
+        private string GetUsernameFromUser()
+        {
+            Console.Write("Enter AzureAD Username: ");
+            return Console.ReadLine();
+        }
+
         public void Menu()
         {
             PrintWelcome();
@@ -53,10 +64,10 @@ namespace MegaOffice
             while (!quit)
             {
                 PrintMainMenu();
-                var cmd = Console.ReadLine();
+                var key = Console.ReadLine();
                 Console.WriteLine();
 
-                switch (cmd.ToUpper())
+                switch (key.ToUpper())
                 {
                     case ("1"):
                         CustomerMenu.Menu();
@@ -68,8 +79,6 @@ namespace MegaOffice
                     case "C":
                         quit = true;
                         break;
-
-
                 }
             }
         }

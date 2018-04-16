@@ -172,13 +172,13 @@ namespace MegaOffice
                 {
                     Console.WriteLine($"Ändra - ID:{customer.InterestingProducts[i].ProductID} Namn: {customer.InterestingProducts[i].Name} -- ({i + 1})");
                 }
-                Console.WriteLine($"Lägg till ny produkt ({customer.Phone.Count + 1})");
+                Console.WriteLine($"Lägg till ny produkt ({customer.InterestingProducts.Count + 1})");
                 Console.Write("Val: ");
                 int index = Convert.ToInt32(Console.ReadLine()) - 1;
                 Product updatedProduct = _mainMenu.ProductMenu.GetProductFromUser();
                 if (updatedProduct == null && index >= 0 && index < customer.InterestingProducts.Count)
                     customer.InterestingProducts.RemoveAt(index);
-                else if (index >= 0 && index < customer.Phone.Count)
+                else if (index >= 0 && index < customer.InterestingProducts.Count)
                     customer.InterestingProducts[index] = updatedProduct;
                 else if (index == customer.InterestingProducts.Count)
                     customer.InterestingProducts.Add(updatedProduct);
@@ -206,7 +206,7 @@ namespace MegaOffice
                 {
                     Console.WriteLine($"Ändra {customer.Phone[i]} ({i + 1})");
                 }
-                Console.WriteLine($"Lägg till nytt telefonnummer ({customer.Phone.Count + 1})");
+                WriteLineInColor($"Lägg till nytt telefonnummer ({customer.Phone.Count + 1})", ConsoleColor.DarkGray);
                 Console.Write("Val: ");
                 int index = Convert.ToInt32(Console.ReadLine()) - 1;
                 Console.Write("Skriv nytt telefonnummer (eller enter för inget telefonnummer): ");
