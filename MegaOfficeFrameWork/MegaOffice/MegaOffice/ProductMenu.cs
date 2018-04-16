@@ -108,13 +108,21 @@ namespace MegaOffice
         {
             PrintProducts(_db.ReadAllProducts());
             int productID = GetProductIDFromUser();
-            return _db.ReadProduct(productID);
+            if (productID > 0)
+                return _db.ReadProduct(productID);
+            else
+                return null;
+
         }
 
         private int GetProductIDFromUser()
         {
             Console.Write("Skriv produktnummer: ");
-            return Convert.ToInt32(Console.ReadLine());
+            string input = Console.ReadLine();
+            if (String.IsNullOrWhiteSpace(input))
+                return 0;
+            else
+                return Convert.ToInt32(input);
         }
 
         public void PrintSingleProduct(Product product)
